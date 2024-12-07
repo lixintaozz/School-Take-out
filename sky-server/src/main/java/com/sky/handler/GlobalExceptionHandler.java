@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /**
  * 全局异常处理器，处理项目中抛出的业务异常
  */
-@RestControllerAdvice
+@RestControllerAdvice           //@ResponseBody + @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
 
@@ -25,3 +25,10 @@ public class GlobalExceptionHandler {
     }
 
 }
+
+
+/*
+ *  Spring的事务管理
+ *  通过在service层的方法上添加@Transactional来实现，默认只能处理Runtime Exception及其子类
+ *  但是可以通过指定@Transactional的rollbackFor属性来处理其他类型的异常
+ * */
