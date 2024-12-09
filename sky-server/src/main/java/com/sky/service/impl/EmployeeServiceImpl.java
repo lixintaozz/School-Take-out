@@ -95,7 +95,9 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public PageResult PageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
+        //先设置分页查询的页码和单页展示记录数
         PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
+        //这里返回这必须要是Page<E>类型，E为查询返回的单个实体类型
         Page<Employee> page = employeeMapper.pageQuery(employeePageQueryDTO);
         List<Employee> list = page.getResult();
         Long total = page.getTotal();
