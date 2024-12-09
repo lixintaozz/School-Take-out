@@ -1,7 +1,9 @@
 package com.sky.service.impl;
 
 import com.sky.constant.MessageConstant;
+import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
@@ -9,9 +11,12 @@ import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.service.EmployeeService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+
+import java.time.LocalDateTime;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -52,6 +57,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //3、返回实体对象
         return employee;
+    }
+
+    @Override
+    public void save(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);   //将employeeDTO的属性复制到employee中的同名属性
+        //设置员工状态，默认为1  0为禁用，1为启用
+        employee.setStatus(StatusConstant.ENABLE);
+        //设置员工密码
+        employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
+        //设置员工创建时间
+        employee.setCreateTime(LocalDateTime.now());
+        //设置员工更新时间
+        employee.setUpdateTime(LocalDateTime.now());
+        //设置新增该员工的用户ID，即管理员ID
+        //TODO: 此处需要获取JWT令牌中包含的用户ID
+        employee.setCreateUser(10L);
+        //设置更新该员工的用户ID，及管理员ID
+        employee.setUpdateUser(10L);
+        employeeMapper.insert(employee);
     }
 
 }
