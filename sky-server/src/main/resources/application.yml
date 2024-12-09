@@ -15,7 +15,7 @@ spring:
 
 mybatis:
   #mapper配置文件
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath:mapper/*.xml    #这里需要配置xml文件的存储路径才能保证xml文件能够被扫描到
   type-aliases-package: com.sky.entity
   configuration:
     #开启驼峰命名
