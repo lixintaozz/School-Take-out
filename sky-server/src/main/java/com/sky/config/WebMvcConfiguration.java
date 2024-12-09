@@ -77,6 +77,8 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     /**
      * 扩展Spring MVC的消息转换器
      * @param converters
+     *
+     * 不同的消息转换器能够按照不同的规则将java对象转换为json数据，从而用于响应前端的请求
      */
     @Override
     protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
