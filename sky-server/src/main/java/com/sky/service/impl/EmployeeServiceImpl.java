@@ -3,6 +3,7 @@ package com.sky.service.impl;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
@@ -72,10 +73,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         //设置员工更新时间
         employee.setUpdateTime(LocalDateTime.now());
         //设置新增该员工的用户ID，即管理员ID
-        //TODO: 此处需要获取JWT令牌中包含的用户ID
-        employee.setCreateUser(10L);
-        //设置更新该员工的用户ID，及管理员ID
-        employee.setUpdateUser(10L);
+        employee.setCreateUser(BaseContext.getCurrentId());
+        //设置更新该员工的用户ID，即管理员ID
+        employee.setUpdateUser(BaseContext.getCurrentId());
         employeeMapper.insert(employee);
     }
 
