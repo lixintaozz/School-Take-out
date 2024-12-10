@@ -110,11 +110,21 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/status/{status}")
+    @ApiOperation("修改员工状态接口")
     public Result startOrStop(@PathVariable Integer status, Long id)
     {
         log.info("修改员工状态, status: {} id: {}", status, id);
         employeeService.startOrStop(status, id);
         return Result.success();
+    }
+
+    @GetMapping("{id}")
+    @ApiOperation("根据ID查询员工接口")
+    public Result<Employee> getById(@PathVariable Long id)
+    {
+        log.info("要查询的员工ID为: {}", id);
+        Employee employee = employeeService.getByID(id);
+        return Result.success(employee);
     }
 
 }
