@@ -139,7 +139,7 @@ public class EmployeeController {
      */
     @PutMapping
     @ApiOperation("编辑员工信息")
-    public Result edit(@RequestBody EmployeeDTO employeeDTO)
+    public Result update(@RequestBody EmployeeDTO employeeDTO)
     {
         log.info("要编辑的员工信息为: {}", employeeDTO);
         employeeService.edit(employeeDTO);

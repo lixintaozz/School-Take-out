@@ -130,7 +130,9 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public Employee getByID(Long id) {
-        return employeeMapper.getById(id);
+        Employee employee = employeeMapper.getById(id);
+        employee.setPassword("****");
+        return employee;
     }
 
     /**
@@ -138,9 +140,12 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @param employeeDTO
      */
     @Override
-    public void edit(EmployeeDTO employeeDTO) {
+    public void update(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDTO, employee);
+        //添加更新时间和更新用户信息
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
         employeeMapper.update(employee);
     }
 
