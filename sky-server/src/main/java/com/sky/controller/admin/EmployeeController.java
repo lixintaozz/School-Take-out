@@ -142,7 +142,7 @@ public class EmployeeController {
     public Result update(@RequestBody EmployeeDTO employeeDTO)
     {
         log.info("要编辑的员工信息为: {}", employeeDTO);
-        employeeService.edit(employeeDTO);
+        employeeService.update(employeeDTO);
         return Result.success();
     }
 
