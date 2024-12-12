@@ -48,7 +48,7 @@ public class Autofill {
         Long updateUser = BaseContext.getCurrentId();
 
         //3.使用反射获取需要操作属性的set方法
-        Object object = joinPoint.getArgs();   //获取连接点方法的参数
+        Object object = joinPoint.getArgs()[0];   //获取连接点方法的参数，注意这里返回的是一个Object数组
         Method methodCreateTime = null;
         try {
             methodCreateTime = object.getClass().getDeclaredMethod(AutoFillConstant.SET_CREATE_TIME, LocalDateTime.class);
