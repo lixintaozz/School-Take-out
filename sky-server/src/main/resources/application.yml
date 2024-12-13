@@ -2,6 +2,10 @@ server:
   port: 8080
 
 spring:
+  #配置单个文件上传大小限制
+  servlet:
+    multipart:
+      max-file-size: 10MB
   profiles:
     active: dev
   main:
