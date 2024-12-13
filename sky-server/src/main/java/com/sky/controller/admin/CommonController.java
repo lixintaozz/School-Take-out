@@ -1,5 +1,6 @@
 package com.sky.controller.admin;
 
+import com.sky.constant.MessageConstant;
 import com.sky.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,15 +26,21 @@ public class CommonController {
      */
     @ApiOperation("文件上传")
     @PostMapping("/upload")
-    public Result<String> upload(MultipartFile file) throws IOException {
+    public Result<String> upload(MultipartFile file)  {
         String originalFilename = file.getOriginalFilename();
         String uuid = UUID.randomUUID().toString();
         assert originalFilename != null;
         String filename = uuid + originalFilename.substring(originalFilename.lastIndexOf("."));
         //文件保存在本机磁盘
-        file.transferTo(new File("D:\\SkyFast\\img\\" + filename));
-        //文件的url访问路径
-        String path = "http://localhost:8080/img/" + filename;   //注意：这里的path必须加上协议http://
-        return Result.success(path);
+        try {
+            file.transferTo(new File("D:\\SkyFast\\img\\" + filename));
+            //文件的url访问路径
+            String path = "http://localhost:8080/img/" + filename;   //注意：这里的path必须加上协议http://
+            return Result.success(path);
+        } catch (IOException e) {
+            log.error("文件上传失败");
+        }
+
+        return Result.error(MessageConstant.UPLOAD_FAILED);
     }
 }
