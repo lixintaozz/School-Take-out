@@ -28,7 +28,7 @@ public class Result<T> implements Serializable {
         return result;
     }
 
-    public static <T> Result<T> error(String msg) {
+    public static Result error(String msg) {
         Result result = new Result();    //这里不指定Result的类型参数时，默认类型参数为Object，这是因为Java的类型擦除机制
         result.msg = msg;
         result.code = 0;
