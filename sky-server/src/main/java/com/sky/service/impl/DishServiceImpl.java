@@ -95,4 +95,22 @@ public class DishServiceImpl implements DishService {
         //4. 根据ids批量删除菜品关联的口味
         dishFlavorMapper.deleteFlavorWithDish(ids);
     }
+
+    /**
+     * 根据id查询菜品
+     * @param id
+     * @return
+     */
+    @Override
+    public DishVO selectByIdWithFlavor(Long id) {
+        //1. 先查询菜品
+        Dish dish = dishMapper.selectById(id);
+        //2.再查询菜品关联的口味
+        List<DishFlavor> flavors = dishFlavorMapper.selectByDishId(id);
+
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish, dishVO);
+        dishVO.setFlavors(flavors);
+        return dishVO;
+    }
 }
