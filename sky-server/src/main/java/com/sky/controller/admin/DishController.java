@@ -51,7 +51,7 @@ public class DishController {
      */
     @DeleteMapping
     @ApiOperation("批量删除菜品接口")
-    public Result delete(@RequestParam List<Long> ids)
+    public Result delete(@RequestParam List<Long> ids)   //这里需要加@RequestParam注解，才能实现String到List<Long>的自动转换
     {
         log.info("批量删除菜品: {}", ids);
         dishService.delete(ids);
