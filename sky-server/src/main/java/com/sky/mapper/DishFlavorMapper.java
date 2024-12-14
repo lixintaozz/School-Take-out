@@ -14,4 +14,10 @@ public interface DishFlavorMapper {
      * @param list
      */
     public void insertBatch(List<DishFlavor> list);
+
+    /**
+     * 删除菜品关联的口味
+     * @param dishIds
+     */
+    void deleteFlavorWithDish(List<Long> dishIds);
 }
