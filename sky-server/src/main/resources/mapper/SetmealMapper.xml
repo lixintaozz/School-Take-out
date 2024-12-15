@@ -15,6 +15,16 @@
             #{id}
         </foreach>
     </delete>
+    
+    <select id="pageQuery" resultType="com.sky.vo.SetmealVO">
+        select setmeal.*, category.name category_name from setmeal left join category on setmeal.category_id = category.id
+        <where>
+            <if test="categoryId != null">setmeal.category_id = #{categoryId}</if>
+            <if test="name != '' and name != null"> and setmeal.name like concat('%', #{name}, '%')</if>
+            <if test="status != null"> and setmeal.status = #{status}</if>
+        </where>
+        order by update_time desc
+    </select>
 
     <update id="update">
         update setmeal
