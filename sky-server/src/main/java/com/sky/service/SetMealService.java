@@ -24,4 +24,11 @@ public interface SetMealService {
      * @param ids
      */
     void deleteWithDishes(List<Long> ids);
+
+    /**
+     * 起售/停售套餐
+     * @param status
+     * @param id
+     */
+    void startOrStop(Integer status, long id);
 }

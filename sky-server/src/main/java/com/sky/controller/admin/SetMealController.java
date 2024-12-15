@@ -63,4 +63,19 @@ public class SetMealController {
         setMealService.deleteWithDishes(ids);
         return Result.success();
     }
+
+    /**
+     * 起售/停售套餐
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("起售/停售套餐")
+    public Result startOrStop(@PathVariable Integer status, long id)
+    {
+        log.info("起售/停售套餐: {}", id);
+        setMealService.startOrStop(status ,id);
+        return Result.success();
+    }
 }
