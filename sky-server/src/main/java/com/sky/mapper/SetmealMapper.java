@@ -1,6 +1,10 @@
 package com.sky.mapper;
 
+import com.sky.annotation.AutoFill;
+import com.sky.entity.Setmeal;
+import com.sky.enumeration.OperationType;
 import com.sky.vo.SetmealVO;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -23,4 +27,11 @@ public interface SetmealMapper {
     @Select("select setmeal.*, category.name category_name from " +
             "setmeal left join category on setmeal.category_id = category.id where setmeal.id = #{id}")
     SetmealVO selectById(Long id);
+
+    /**
+     * 新增菜品
+     * @param setmeal
+     */
+    @AutoFill(OperationType.INSERT)
+    void insert(Setmeal setmeal);
 }

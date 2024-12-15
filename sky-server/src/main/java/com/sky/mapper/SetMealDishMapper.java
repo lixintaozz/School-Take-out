@@ -23,4 +23,10 @@ public interface SetMealDishMapper {
      */
     @Select("select * from setmeal_dish where setmeal_id = #{setMealId}")
     List<SetmealDish> selectBySetMealId(Long setMealId);
+
+    /**
+     * 插入套餐关联的菜品信息
+     * @param setmealDishes
+     */
+    void insertBatch(List<SetmealDish> setmealDishes);
 }
