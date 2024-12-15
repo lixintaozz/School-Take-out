@@ -40,4 +40,10 @@ public interface SetMealService {
      * @return
      */
     PageResult pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
+
+    /**
+     * 修改套餐
+     * @param setmealDTO
+     */
+    void updateWithDishes(SetmealDTO setmealDTO);
 }

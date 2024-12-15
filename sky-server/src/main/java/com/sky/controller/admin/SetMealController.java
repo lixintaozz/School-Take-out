@@ -93,4 +93,18 @@ public class SetMealController {
         PageResult pageResult = setMealService.pageQuery(setmealPageQueryDTO);
         return Result.success(pageResult);
     }
+
+    /**
+     * 修改套餐
+     * @param setmealDTO
+     * @return
+     */
+    @ApiOperation("修改套餐")
+    @PutMapping
+    Result update(@RequestBody SetmealDTO setmealDTO)
+    {
+        log.info("修改套餐: {}", setmealDTO);
+        setMealService.updateWithDishes(setmealDTO);
+        return Result.success();
+    }
 }

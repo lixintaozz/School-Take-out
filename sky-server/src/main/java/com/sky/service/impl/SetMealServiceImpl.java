@@ -15,16 +15,19 @@ import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.SetMealService;
 import com.sky.vo.SetmealVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.index.PathBasedRedisIndexDefinition;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
 @Service
+@Slf4j
 public class SetMealServiceImpl implements SetMealService {
 
     @Autowired
@@ -64,8 +67,10 @@ public class SetMealServiceImpl implements SetMealService {
 
         //2.然后插入套餐关联的菜品信息
         List<SetmealDish> list = setmealDTO.getSetmealDishes();
-        list.forEach(setmealDish -> setmealDish.setSetmealId(setmealId));
-        setMealDishMapper.insertBatch(list);
+        if (list != null && !list.isEmpty()) {
+            list.forEach(setmealDish -> setmealDish.setSetmealId(setmealId));
+            setMealDishMapper.insertBatch(list);
+        }
     }
 
     /**
@@ -113,5 +118,28 @@ public class SetMealServiceImpl implements SetMealService {
         pageResult.setRecords(page.getResult());
         pageResult.setTotal(page.getTotal());
         return pageResult;
+    }
+
+    /**
+     * 修改套餐
+     * @param setmealDTO
+     */
+    @Override
+    @Transactional
+    public void updateWithDishes(SetmealDTO setmealDTO) {
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO, setmeal);
+        setmealMapper.update(setmeal);
+
+        List<Long> setmealIds= new ArrayList<>();
+        setmealIds.add(setmealDTO.getId());
+        setMealDishMapper.deleteBatch(setmealIds);
+
+
+        List<SetmealDish> list = setmealDTO.getSetmealDishes();
+        if (list != null && !list.isEmpty()) {
+            list.forEach(setmealDish -> setmealDish.setSetmealId(setmealDTO.getId()));
+            setMealDishMapper.insertBatch(list);
+        }
     }
 }

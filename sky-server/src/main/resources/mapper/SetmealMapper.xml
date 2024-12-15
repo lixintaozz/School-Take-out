@@ -23,7 +23,7 @@
             <if test="name != '' and name != null"> and setmeal.name like concat('%', #{name}, '%')</if>
             <if test="status != null"> and setmeal.status = #{status}</if>
         </where>
-        order by update_time desc
+        order by setmeal.update_time desc
     </select>
 
     <update id="update">
@@ -38,5 +38,6 @@
             <if test="updateTime != null"> update_time = #{updateTime}, </if>
             <if test="updateUser != null"> update_user = #{updateUser}, </if>
         </set>
+        where id = #{id}
     </update>
 </mapper>
