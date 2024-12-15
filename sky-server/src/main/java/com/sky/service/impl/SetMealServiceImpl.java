@@ -1,8 +1,12 @@
 package com.sky.service.impl;
 
+import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
+import com.sky.enumeration.OperationType;
+import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.SetMealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.service.SetMealService;
@@ -58,5 +62,24 @@ public class SetMealServiceImpl implements SetMealService {
         List<SetmealDish> list = setmealDTO.getSetmealDishes();
         list.forEach(setmealDish -> setmealDish.setSetmealId(setmealId));
         setMealDishMapper.insertBatch(list);
+    }
+
+    /**
+     * 批量删除套餐
+     * @param ids
+     */
+    @Override
+    @Transactional
+    public void deleteWithDishes(List<Long> ids) {
+        //1. 首先查询套餐是不是处于起售中，如果是，抛异常
+        for (Long id : ids) {
+            SetmealVO setmealvo = setmealMapper.selectById(id);
+            if (setmealvo.getStatus().equals(StatusConstant.ENABLE))
+                throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ON_SALE);
+        }
+        //2. 先删除套餐
+        setmealMapper.deleteBatch(ids);
+        //3. 再删除套餐关联的菜品
+        setMealDishMapper.deleteBatch(ids);
     }
 }
