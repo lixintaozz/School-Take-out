@@ -6,6 +6,13 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB
+
+  #配置Redis
+  redis:
+    host: ${sky.redis.host}
+    port: ${sky.redis.port}
+    password: ${sky.redis.password}
+
   #配置需要激活的环境配置文件
   profiles:
     active: dev
