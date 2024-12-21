@@ -47,4 +47,9 @@
         </where>
         order by update_time desc
     </select>
+
+    <select id="selectByCategoryId" resultType="com.sky.entity.Dish">
+        select * from dish where category_id = #{categoryId}
+        <if test="status != null"> and status = #{status} </if>
+    </select>
 </mapper>
