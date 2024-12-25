@@ -12,6 +12,7 @@ import com.sky.service.ShoppingCartService;
 import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.privilege.SetAccessibleAction;
+import org.apache.poi.xssf.binary.XSSFBHyperlinksTable;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -93,5 +94,29 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public void clean() {
         Long id = BaseContext.getCurrentId();
         shoppingCartMapper.clean(id);
+    }
+
+    /**
+     * 删除购物车中的一个商品
+     * @param shoppingCartDTO
+     */
+    @Override
+    public void sub(ShoppingCartDTO shoppingCartDTO) {
+        //1. 获取要删除的商品的数据
+        ShoppingCart shoppingCart = new ShoppingCart();
+        BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
+        Long id = BaseContext.getCurrentId();
+        shoppingCart.setUserId(id);
+
+        List<ShoppingCart> shoppingCartList = shoppingCartMapper.selectExist(shoppingCart);
+        ShoppingCart shoppingCart1 = shoppingCartList.get(0);
+        //2. 如果商品数量减一后为零，那么从表中删除商品
+        if (shoppingCart1.getNumber() == 1)
+            shoppingCartMapper.deleteById(shoppingCart1);
+        else {
+            //3. 否则将商品数量减一
+            shoppingCart1.setNumber(shoppingCart1.getNumber() - 1);
+            shoppingCartMapper.updateById(shoppingCart1);
+        }
     }
 }
