@@ -3,6 +3,7 @@ package com.sky.mapper;
 import com.sky.dto.ShoppingCartDTO;
 import com.sky.entity.ShoppingCart;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
@@ -28,4 +29,12 @@ public interface ShoppingCartMapper {
      * @param shoppingCart
      */
     void insert(ShoppingCart shoppingCart);
+
+    /**
+     * 查看购物车
+     * @param id
+     * @return
+     */
+    @Select("select * from shopping_cart where user_id = #{id}")
+    List<ShoppingCart> list(Long id);
 }
