@@ -6,14 +6,12 @@ import com.sky.dto.OrdersSubmitDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
-import com.sky.vo.OrderOverViewVO;
-import com.sky.vo.OrderPaymentVO;
-import com.sky.vo.OrderReportVO;
-import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Select;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,6 +50,11 @@ public class OrderController {
         return Result.success(orderPaymentVO);
     }
 
+    /**
+     * 查询历史订单
+     * @param ordersPageQueryDTO
+     * @return
+     */
     @GetMapping("/historyOrders")
     @ApiOperation("查询历史订单")
     public Result<PageResult> history(OrdersPageQueryDTO ordersPageQueryDTO)
@@ -59,5 +62,19 @@ public class OrderController {
         log.info("查询历史订单: {}", ordersPageQueryDTO);
         PageResult pageResult = orderService.pageQuery(ordersPageQueryDTO);
         return Result.success(pageResult);
+    }
+
+    /**
+     * 查询订单详情
+     * @param id
+     * @return
+     */
+    @GetMapping("/orderDetail/{id}")
+    @ApiOperation("查询订单详情")
+    public Result<OrderVO> orderDetail(@PathVariable Long id)
+    {
+        log.info("查询订单: {} 详情", id);
+        OrderVO orderVO = orderService.selectByOrderId(id);
+        return Result.success(orderVO);
     }
 }
