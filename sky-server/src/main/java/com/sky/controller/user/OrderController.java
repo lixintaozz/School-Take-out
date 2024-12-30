@@ -15,7 +15,7 @@ import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@RestController("userOrderController")
 @Api(tags = "C端-订单相关接口")
 @Slf4j
 @RequestMapping("/user/order")
@@ -89,6 +89,20 @@ public class OrderController {
     {
         log.info("取消订单: {}", id);
         orderService.cancel(id);
+        return Result.success();
+    }
+
+    /**
+     * 再来一单
+     * @param id
+     * @return
+     */
+    @PostMapping("/repetition/{id}")
+    @ApiOperation("再来一单")
+    public Result buyAgain(@PathVariable Long id)
+    {
+        log.info("再来一单!");
+        orderService.buyAgain(id);
         return Result.success();
     }
 }

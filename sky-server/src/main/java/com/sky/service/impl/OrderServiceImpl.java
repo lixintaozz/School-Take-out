@@ -222,4 +222,23 @@ public class OrderServiceImpl implements OrderService {
         orders1.setStatus(Orders.CANCELLED);
         orderMapper.update(orders1);
     }
+
+    /**
+     * 再来一单
+     * @param id
+     */
+    @Override
+    public void buyAgain(Long id) {
+        List<OrderDetail> orderDetails = orderDetailMapper.getByOrdersId(id);
+        List<ShoppingCart> shoppingCartList = new ArrayList<>();
+        if (orderDetails != null && !orderDetails.isEmpty()) {
+            for (OrderDetail orderDetail : orderDetails) {
+                ShoppingCart shoppingCart = new ShoppingCart();
+                BeanUtils.copyProperties(orderDetail, shoppingCart);
+                shoppingCart.setUserId(BaseContext.getCurrentId());
+                shoppingCart.setCreateTime(LocalDateTime.now());
+                shoppingCartMapper.insert(shoppingCart);
+            }
+        }
+    }
 }
