@@ -200,4 +200,26 @@ public class OrderServiceImpl implements OrderService {
         orderVO.setOrderDetailList(orderDetails);
         return orderVO;
     }
+
+    /**
+     * 取消订单
+     * @param id
+     */
+    @Override
+    public void cancel(Long id) {
+        //1. 先判断订单是否存在，不存在则抛异常
+        Orders orders = orderMapper.selectById(id);
+        if (orders == null)
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        //2. 如果订单状态大于2，那么需要电话联系商家
+        if (orders.getStatus() > 2)
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        //3. 否则修改订单状态为已取消
+        Orders orders1 = new Orders();
+        orders1.setId(orders.getId());
+        orders1.setCancelReason("用户取消");
+        orders1.setCancelTime(LocalDateTime.now());
+        orders1.setStatus(Orders.CANCELLED);
+        orderMapper.update(orders1);
+    }
 }
