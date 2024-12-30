@@ -16,6 +16,9 @@ import java.util.List;
 public class OrderVO extends Orders implements Serializable {
     private Long id;
 
+    //以字符串形式展示的菜品
+    private String orderDishes;
+
     //订单号
     private String number;
 

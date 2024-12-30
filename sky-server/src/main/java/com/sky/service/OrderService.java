@@ -54,4 +54,11 @@ public interface OrderService {
      * @param id
      */
     void buyAgain(Long id);
+
+    /**
+     * 条件查询
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    PageResult conditionSearch(OrdersPageQueryDTO ordersPageQueryDTO);
 }
