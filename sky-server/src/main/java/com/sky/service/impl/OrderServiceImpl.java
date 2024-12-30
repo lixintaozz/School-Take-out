@@ -24,6 +24,7 @@ import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import io.swagger.models.auth.In;
 import org.apache.poi.hssf.record.chart.SheetPropertiesRecord;
+import org.apache.poi.sl.usermodel.SlideShow;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -286,5 +287,24 @@ public class OrderServiceImpl implements OrderService {
                 .toBeConfirmed(toBeConfirmed)
                 .build();
         return orderStatisticsVO;
+    }
+
+    /**
+     * 查询订单详情-管理端
+     * @param id
+     * @return
+     */
+    @Override
+    public OrderVO searchDetail(Long id) {
+        OrderVO orderVO = selectByOrderId(id);
+        List<OrderDetail> orderDetails = orderVO.getOrderDetailList();
+        List<String> dishBrives = new ArrayList<>();
+        orderDetails.forEach(orderDetail -> {
+            String dishBrief = orderDetail.getName() + "*" + orderDetail.getNumber();
+            dishBrives.add(dishBrief);
+        });
+        String s = String.join(";", dishBrives);
+        orderVO.setOrderDishes(s);
+        return orderVO;
     }
 }
