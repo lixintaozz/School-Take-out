@@ -338,6 +338,7 @@ public class OrderServiceImpl implements OrderService {
                 .id(ordersRejectionDTO.getId())
                 .rejectionReason(ordersRejectionDTO.getRejectionReason())
                 .status(Orders.CANCELLED)
+                .cancelTime(LocalDateTime.now())
                 .build();
 
         //3.更新数据库订单数据
