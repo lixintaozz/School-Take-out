@@ -6,10 +6,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
-import com.sky.dto.OrdersConfirmDTO;
-import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.dto.OrdersPaymentDTO;
-import com.sky.dto.OrdersSubmitDTO;
+import com.sky.dto.*;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.BaseException;
@@ -36,6 +33,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -320,5 +318,29 @@ public class OrderServiceImpl implements OrderService {
                 .status(Orders.CONFIRMED)
                 .build();
         orderMapper.update(orders);
+    }
+
+    /**
+     * 拒单
+     * @param ordersRejectionDTO
+     */
+    @Override
+    public void rejection(OrdersRejectionDTO ordersRejectionDTO) {
+        //1.先判断订单状态是否为待接单，不是则抛异常
+        Orders orders = orderMapper.selectById(ordersRejectionDTO.getId());
+        if (orders == null)
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+
+        if (orders.getStatus() == null || orders.getStatus() != Orders.TO_BE_CONFIRMED)
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        //2.设置订单的拒单原因
+        Orders orders1 = Orders.builder()
+                .id(ordersRejectionDTO.getId())
+                .rejectionReason(ordersRejectionDTO.getRejectionReason())
+                .status(Orders.CANCELLED)
+                .build();
+
+        //3.更新数据库订单数据
+        orderMapper.update(orders1);
     }
 }
