@@ -52,10 +52,4 @@ public interface OrderMapper {
     @Select("select count(id) from orders where status = #{status}")
     Integer selectStatus(Integer status);
 
-    /**
-     * 更新订单状态
-     * @param ordersConfirmDTO
-     */
-    @Update("update orders set status = #{status} where id = #{id}")
-    void updateStatusById(OrdersConfirmDTO ordersConfirmDTO);
 }
