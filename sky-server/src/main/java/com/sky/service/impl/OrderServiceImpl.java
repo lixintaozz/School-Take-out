@@ -334,7 +334,7 @@ public class OrderServiceImpl implements OrderService {
         if (orders == null)
             throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
 
-        if (orders.getStatus() == null || orders.getStatus() != Orders.TO_BE_CONFIRMED)
+        if (orders.getStatus() == null || !orders.getStatus().equals(Orders.TO_BE_CONFIRMED))
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         //2.设置订单的拒单原因
         Orders orders1 = Orders.builder()
@@ -362,5 +362,27 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         orderMapper.update(orders);
+    }
+
+    /**
+     * 派送订单
+     * @param id
+     */
+    @Override
+    public void deliver(Long id) {
+        Orders orders = orderMapper.selectById(id);
+        if (orders == null)
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+
+        if (orders.getStatus() == null || !orders.getStatus().equals(Orders.CONFIRMED))
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+
+        Orders orders1 = Orders.builder()
+                .id(id)
+                .status(Orders.DELIVERY_IN_PROGRESS)
+                .build();
+
+        orderMapper.update(orders1);
+
     }
 }
