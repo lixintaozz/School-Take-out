@@ -435,8 +435,11 @@ public class OrderServiceImpl implements OrderService {
         //获取店铺的经纬坐标
         JSONObject location = jsonObject.getJSONObject("result").getJSONObject("location");
         String shopLng = location.getString("lng");
+        shopLng = shopLng.substring(0, shopLng.lastIndexOf(".") + 7);
         String shopLat = location.getString("lat");
+        shopLat = shopLat.substring(0, shopLat.lastIndexOf(".") + 7);
         String shopAddressPivot = shopLng + "," + shopLat;
+
 
         map.put("address", address);
 
@@ -450,8 +453,12 @@ public class OrderServiceImpl implements OrderService {
         //获取配送地址的经纬坐标
         JSONObject userLocation = jsonObject1.getJSONObject("result").getJSONObject("location");
         String userLng = userLocation.getString("lng");
+        userLng = userLng.substring(0, userLng.lastIndexOf(".") + 7);
         String userLat = userLocation.getString("lat");
+        userLat = userLat.substring(0, userLat.lastIndexOf(".") + 7);
         String userAddressPivot = userLng + "," + userLat;
+
+
 
         //获取店铺和配送地址的距离
         map.put("origin", shopAddressPivot);
@@ -461,6 +468,7 @@ public class OrderServiceImpl implements OrderService {
         String doneGet1 = HttpClientUtil.doGet("https://api.map.baidu.com/directionlite/v1/driving", map);
         JSONObject jsonObject2 = JSONObject.parseObject(doneGet1);
 
+        System.out.println(doneGet1);
         if (jsonObject2.getInteger("status") != 0)
             throw new OrderBusinessException("配送路线规划失败");
 
