@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.WebSocket.WebSocketServer;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.*;
@@ -57,6 +58,9 @@ public class OrderServiceImpl implements OrderService {
     private String shopAddress;
     @Value("${sky.baidu.ak}")
     private String ak;
+
+    @Autowired
+    private WebSocketServer webSocketServer;
 
 
     /**
@@ -170,6 +174,16 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         orderMapper.update(orders);
+
+        //使用websocket告知商家来单
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", 1);
+        jsonObject.put("orderId", ordersDB.getId());
+        jsonObject.put("content", "订单号：" + outTradeNo);
+
+        String jsonString = jsonObject.toJSONString();
+        webSocketServer.sendToAllClient(jsonString);
+
     }
 
     /**
@@ -414,6 +428,26 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         orderMapper.update(orders1);
+    }
+
+    /**
+     * 用户催单
+     * @param id
+     */
+    @Override
+    public void remainder(Long id) {
+        Orders orders = orderMapper.selectById(id);
+        if (orders == null)
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+
+        //使用websocket告知商家用户催单
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", 2);
+        jsonObject.put("orderId", id);
+        jsonObject.put("content", "订单号：" + orders.getNumber());
+
+        String jsonString = jsonObject.toJSONString();
+        webSocketServer.sendToAllClient(jsonString);
     }
 
     /**
