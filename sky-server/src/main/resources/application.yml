@@ -62,3 +62,11 @@ sky:
     appid: ${sky.wechat.appid}
     secret: ${sky.wechat.secret}
 
+  #设置店铺地址
+  shop:
+    address: 北京市海淀区上地十街10号
+
+  #设置百度AK
+  baidu:
+    ak: 8RiWSPxgcVv5oPcJpMMuA8OAyqYw0wa7
+
