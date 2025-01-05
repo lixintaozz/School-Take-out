@@ -2,6 +2,7 @@ package com.sky.controller.admin;
 
 import com.sky.result.Result;
 import com.sky.service.ReportService;
+import com.sky.vo.OrderReportVO;
 import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
@@ -67,6 +68,7 @@ public class ReportController {
      * @return
      */
     @GetMapping("/turnoverStatistics")
+    @ApiOperation("营业额统计接口")
     public Result<TurnoverReportVO> turnoverCount(
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end)
@@ -74,6 +76,24 @@ public class ReportController {
         log.info("查询营业额：{} to {}", begin, end);
         TurnoverReportVO turnoverReportVO = reportService.turnoverCount(begin, end);
         return Result.success(turnoverReportVO);
+    }
+
+
+    /**
+     * 订单统计接口
+     * @param begin
+     * @param end
+     * @return
+     */
+    @GetMapping("/ordersStatistics")
+    @ApiOperation("订单统计接口")
+    public Result<OrderReportVO> orderCount(
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end)
+    {
+        log.info("查询订单：{} to {}", begin, end);
+        OrderReportVO orderReportVO = reportService.orderCount(begin, end);
+        return Result.success(orderReportVO);
     }
 
 }

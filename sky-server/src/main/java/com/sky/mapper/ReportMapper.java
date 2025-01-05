@@ -26,11 +26,20 @@ public interface ReportMapper {
     Integer selectUserCount(LocalDateTime beginTime, LocalDateTime endTime);
 
     /**
-     * 查询指定时间范围内的营业额
+     * &#x67E5;&#x8BE2;&#x6307;&#x5B9A;&#x65F6;&#x95F4;&#x8303;&#x56F4;&#x5185;&#x7684;&#x8425;&#x4E1A;&#x989D;
      * @param beginTime
      * @param endTime
      * @param status
      * @return
      */
     BigDecimal selectTurnover(LocalDateTime beginTime, LocalDateTime endTime, Integer status);
+
+
+    /**
+     * 查询指定时间范围内的订单数据
+     * @param beginTime
+     * @param endTime
+     * @param status
+     */
+    Integer selectOrderCount(LocalDateTime beginTime, LocalDateTime endTime, Integer status);
 }

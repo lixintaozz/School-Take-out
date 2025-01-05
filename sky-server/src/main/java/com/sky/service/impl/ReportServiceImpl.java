@@ -4,6 +4,7 @@ import com.sky.dto.GoodsSalesDTO;
 import com.sky.entity.Orders;
 import com.sky.mapper.ReportMapper;
 import com.sky.service.ReportService;
+import com.sky.vo.OrderReportVO;
 import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
@@ -121,6 +122,52 @@ public class ReportServiceImpl implements ReportService {
         return TurnoverReportVO.builder()
                 .dateList(StringUtils.join(localDateList, ","))
                 .turnoverList(StringUtils.join(bigDecimals, ","))
+                .build();
+    }
+
+    /**
+     * 订单统计接口
+     * @param begin
+     * @param end
+     * @return
+     */
+    @Override
+    public OrderReportVO orderCount(LocalDate begin, LocalDate end) {
+        //1. 准备日期数据
+        List<LocalDate> localDateList = new ArrayList<>();
+        while (!begin.equals(end))
+        {
+            localDateList.add(begin);
+            begin = begin.plusDays(1);
+        }
+        localDateList.add(end);
+
+        //2.准备订单数据
+        List<Integer> totalOrders = new ArrayList<>();
+        List<Integer> validOrders = new ArrayList<>();
+        Integer total = 0;
+        Integer valid = 0;
+        for (LocalDate localDate : localDateList) {
+            LocalDateTime beginTime = LocalDateTime.of(localDate, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(localDate, LocalTime.MAX);
+            Integer orderCount = reportMapper.selectOrderCount(beginTime, endTime, null);
+            total += orderCount;
+            totalOrders.add(orderCount == null ? 0 : orderCount);
+            Integer validNum = reportMapper.selectOrderCount(beginTime, endTime, Orders.COMPLETED);
+            validOrders.add(validNum == null ? 0 : validNum);
+            valid += validNum;
+        }
+
+        Double validRate = 0.0;
+        if (total != 0)
+            validRate = valid.doubleValue() / total;
+        return OrderReportVO.builder()
+                .dateList(StringUtils.join(localDateList, ","))
+                .orderCountList(StringUtils.join(totalOrders, ","))
+                .validOrderCountList(StringUtils.join(validOrders, ","))
+                .totalOrderCount(total)
+                .validOrderCount(valid)
+                .orderCompletionRate(validRate)
                 .build();
     }
 }
