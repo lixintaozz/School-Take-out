@@ -3,6 +3,7 @@ package com.sky.mapper;
 import com.sky.dto.GoodsSalesDTO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,4 +24,13 @@ public interface ReportMapper {
      * @return
      */
     Integer selectUserCount(LocalDateTime beginTime, LocalDateTime endTime);
+
+    /**
+     * 查询指定时间范围内的营业额
+     * @param beginTime
+     * @param endTime
+     * @param status
+     * @return
+     */
+    BigDecimal selectTurnover(LocalDateTime beginTime, LocalDateTime endTime, Integer status);
 }

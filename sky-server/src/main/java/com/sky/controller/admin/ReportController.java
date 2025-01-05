@@ -3,6 +3,7 @@ package com.sky.controller.admin;
 import com.sky.result.Result;
 import com.sky.service.ReportService;
 import com.sky.vo.SalesTop10ReportVO;
+import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +28,7 @@ public class ReportController {
 
     /**
      * 查询销量排名top10
+     *
      * @param begin
      * @param end
      * @return
@@ -34,9 +36,8 @@ public class ReportController {
     @GetMapping("/top10")
     @ApiOperation("查询销量排名top10")
     public Result<SalesTop10ReportVO> selectTop10(
-            @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate begin,
-            @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate end)
-    {
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
         log.info("查询销量排名top10：{} to {} ", begin, end);
         SalesTop10ReportVO salesTop10ReportVO = reportService.selectTop10(begin, end);
         return Result.success(salesTop10ReportVO);
@@ -44,6 +45,7 @@ public class ReportController {
 
     /**
      * 用户统计接口
+     *
      * @param begin
      * @param end
      * @return
@@ -51,11 +53,27 @@ public class ReportController {
     @GetMapping("/userStatistics")
     @ApiOperation("用户统计接口")
     public Result<UserReportVO> userCount(
-            @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate begin,
-            @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate end)
-    {
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
         log.info("查询用户数量：{} to {} ", begin, end);
         UserReportVO userReportVO = reportService.userCount(begin, end);
         return Result.success(userReportVO);
     }
+
+    /**
+     * 营业额统计接口
+     * @param begin
+     * @param end
+     * @return
+     */
+    @GetMapping("/turnoverStatistics")
+    public Result<TurnoverReportVO> turnoverCount(
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end)
+    {
+        log.info("查询营业额：{} to {}", begin, end);
+        TurnoverReportVO turnoverReportVO = reportService.turnoverCount(begin, end);
+        return Result.success(turnoverReportVO);
+    }
+
 }
