@@ -4,6 +4,7 @@ import com.sky.dto.GoodsSalesDTO;
 import com.sky.mapper.ReportMapper;
 import com.sky.service.ReportService;
 import com.sky.vo.SalesTop10ReportVO;
+import com.sky.vo.UserReportVO;
 import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -49,5 +50,42 @@ public class ReportServiceImpl implements ReportService {
                 .numberList(StringUtils.join(sales, ","))
                 .build();
 
+    }
+
+    /**
+     * 用户统计接口
+     * @param begin
+     * @param end
+     * @return
+     */
+    @Override
+    public UserReportVO userCount(LocalDate begin, LocalDate end) {
+        //1.准备日期数据
+        List<LocalDate> localDateList = new ArrayList<>();
+        while (!begin.equals(end))
+        {
+            localDateList.add(begin);
+            begin = begin.plusDays(1);
+        }
+        localDateList.add(end);
+
+        //2.准备新增用户数据
+        List<Integer> userAddCount = new ArrayList<>();
+        //3.准备总用户数据
+        List<Integer> userTotalCount = new ArrayList<>();
+
+        for (LocalDate localDate : localDateList) {
+            LocalDateTime beginTime = LocalDateTime.of(localDate, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(localDate, LocalTime.MAX);
+            userTotalCount.add(reportMapper.selectUserCount(null, endTime));
+            userAddCount.add(reportMapper.selectUserCount(beginTime, endTime));
+        }
+
+
+        return UserReportVO.builder()
+                .newUserList(StringUtils.join(userAddCount, ","))
+                .totalUserList(StringUtils.join(userTotalCount, ","))
+                .dateList(StringUtils.join(localDateList, ","))
+                .build();
     }
 }

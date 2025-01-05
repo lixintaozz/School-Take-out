@@ -15,4 +15,12 @@ public interface ReportMapper {
      * @return
      */
     List<GoodsSalesDTO> selectTop10(LocalDateTime beginTime, LocalDateTime endTime);
+
+    /**
+     * 查询指定时间范围内的用户总数
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    Integer selectUserCount(LocalDateTime beginTime, LocalDateTime endTime);
 }
