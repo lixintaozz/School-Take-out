@@ -193,7 +193,7 @@ public class ReportServiceImpl implements ReportService {
 
         //2. 通过POI将数据写入到Excel文件中
 
-        //Todo:Java通过这种方法来获取当前项目中其他文件夹下的文件位置貌似返回的是文件系统的路径，适用于开发环境中，在其他场景下不一定适用（如打包为jar包）
+        //Java通过这种方法来操作当前项目中src/main/resources的文件
         InputStream in = this.getClass().getClassLoader().getResourceAsStream("template/运营数据报表模板.xlsx");
 
         try {
