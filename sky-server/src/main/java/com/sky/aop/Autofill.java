@@ -77,10 +77,10 @@ public class Autofill {
         //4.根据注解的不同类型，对方法参数做不同的操作
         if (annotation.value() == OperationType.INSERT)
         {
-            methodCreateTime.invoke(object, createTime);
-            methodCreateUser.invoke(object, createUser);
+            methodUpdateTime.invoke(object, updateTime);
+            methodUpdateUser.invoke(object, updateUser);
         }
-        methodUpdateTime.invoke(object, updateTime);
-        methodUpdateUser.invoke(object, updateUser);
+        methodCreateTime.invoke(object, createTime);
+        methodCreateUser.invoke(object, createUser);
     }
 }
