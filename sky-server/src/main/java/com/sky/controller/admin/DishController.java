@@ -33,9 +33,9 @@ public class DishController {
     @PostMapping
     public Result save(@RequestBody DishDTO dishDTO)
     {
-        cleanCache(DISH_KEY + dishDTO.getCategoryId());
         log.info("新增的菜品为: {}", dishDTO);
         dishService.save(dishDTO);
+        cleanCache(DISH_KEY + dishDTO.getCategoryId());
         return Result.success();
     }
 
@@ -62,9 +62,9 @@ public class DishController {
     @ApiOperation("批量删除菜品接口")
     public Result delete(@RequestParam List<Long> ids)   //这里需要加@RequestParam注解，才能实现String到List<Long>的自动转换
     {
-        cleanCache(DISH_KEY + "*");
         log.info("批量删除菜品: {}", ids);
         dishService.delete(ids);
+        cleanCache(DISH_KEY + "*");
         return Result.success();
     }
 
@@ -91,9 +91,9 @@ public class DishController {
     @ApiOperation("修改菜品接口")
     public Result update(@RequestBody DishDTO dishDTO)
     {
-        cleanCache(DISH_KEY + "*");
         log.info("修改菜品: {}", dishDTO);
         dishService.updateWithFlavor(dishDTO);
+        cleanCache(DISH_KEY + "*");
         return Result.success();
     }
 
@@ -107,9 +107,9 @@ public class DishController {
     @ApiOperation("修改菜品状态接口")
     public Result startOrStop(@PathVariable Integer status, Long id)
     {
-        cleanCache(DISH_KEY + "*");
         log.info("起售/停售菜品: {}", id);
         dishService.startOrStop(status, id);
+        cleanCache(DISH_KEY + "*");
         return Result.success();
     }
 

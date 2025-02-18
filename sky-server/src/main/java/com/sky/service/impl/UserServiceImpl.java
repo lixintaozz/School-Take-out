@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
         //解析Json格式的返回数据
         JSONObject jsonObject = JSONObject.parseObject(response);
-        String openid = (String) jsonObject.get("openid");
+        String openid = jsonObject.getString("openid");
 
         //如果登陆失败，抛异常
         if (openid == null)
