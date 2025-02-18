@@ -193,7 +193,7 @@ public class ReportServiceImpl implements ReportService {
 
         //2. 通过POI将数据写入到Excel文件中
 
-        //Java通过这种方法来操作当前项目中src/main/resources的文件
+        //Java通过这种方法来操作当前项目中src/main/resources的文件     src/main/resources真的是很重要的类路径
         InputStream in = this.getClass().getClassLoader().getResourceAsStream("template/运营数据报表模板.xlsx");
 
         try {
